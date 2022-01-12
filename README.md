@@ -10,13 +10,18 @@ The top level driver script multislidealignment_batch_driver.m merely configures
 Within each directory to be aligned, the script assumes the first subdirectory is IF, and that each additional directory is a pass of AEC.  On new data it may be easier to configure variables and call alignSlides_multi_IHC.m directly)
 
 ## Short Instructions for de novo alignment:
-1.	Save multiple IHC and IF results as tiffs from caseviewer (or other software) at desired final resolution (typically 1:1, full resolution) in directory with structure:
+1.	Save multiple IHC and IF results as tiffs from caseviewer (or other software) at desired final resolution (typically 1:1, full resolution). Note that to avoid creating hard ROI edges due to export masking in the background it is better to use a rectangular ROI to define the regions in caseviewer. Create a directory with structure:
 
 * ROI 1 on slide 1 directory  
-  * IF directory e.g. ‘0-iF’  
-  * IHC 1 directory e.g. ‘1-AEC_pass1’  
+  * IF directory e.g. ‘0-iF’
+    * IF Channel 1
+    * IF Chanel 2
+   * ...  
+  * IHC 1 directory e.g. ‘1-AEC_pass1’
+    * IHC 1 RGB image   
   * …  
-  * IHC N directory e.g. ‘N-ACE_passN’  
+  * IHC N directory e.g. ‘N-ACE_passN’ 
+    * IHC N RGB image 
 * ROI 2 on slide 1 directory
   * … 
 * …  
