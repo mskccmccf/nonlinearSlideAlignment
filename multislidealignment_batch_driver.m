@@ -6,11 +6,7 @@
 clear; close all; clc;
 delete(gcp('nocreate'))
 %likely to change parameters
-
-%location of directories each of which contain a set of exported images to
-%be merged
-basedir = 'F:\slide_data\Wholeslide\wholeslidetop\';
-outputsuffix='alignmentresult.ome.tiff';
+tic
 
 %downsampled size of image that is used in computing alignment
 %1/8 is typically used if 1:1 export, sometimes 1/4 has been better
@@ -41,6 +37,12 @@ imscale=1; %scale at which aligned results are output (1 i.e. scale of exported 
 
 %top level driver walks provided directory, parses out (multiple) IHC and
 %one IF image and makes call to align them
+%location of directories each of which contain a set of exported images to
+%be merged
+
+basedir = uigetdir('','Select Directory Containing ROIs for Alignment');
+
+outputsuffix='alignmentresult.ome.tiff';
 
 %note treats first directory in list of subdirectories provided by pwd as
 %IF and subsequent as IHC aligning them in that directory order
@@ -104,6 +106,7 @@ for t = 1:(n-1)
     alignSlides_multi_IHC(pathinfo(t,:),allIHCpath(t,:),currentFolder,unmixmatrix,alignmode,discardresidual,visualize,ifcres,ihcres,alignres,imscale);
 end
 
+toc
 
 
 function imgpath = getimagedown(path)
