@@ -58,10 +58,14 @@ The order is IHC1,…, (decon He, stain, residual (if output)) then the IF in th
 
 Note by default residual saving is turned off so 3 IHC images will contribute 6 rather than 9 channels.  
 
-Since channel names do not propagate to the final tiff, it’s best to create a qupath project file add the images to the project and adjust the names of channels in the project. Open the project rather than the individual images subsequently.  
+Since channel names do not propagate to the final tiff, it’s best to create a qupath project file add the images to the project and adjust the names of channels in the project (see directly below). Open the project rather than the individual images subsequently.  
 
-To do: might be more efficient to pyramidalize individual channels and use OME companion XML file to wrap them together.
+Renaming all channels in a Qupath Project:
+Create qupath project, add all images from the same experiment (same number of channels, same stains). Modify channel names/colors for first image. Order of channel is described above.  Close Qupath, select yes when prompted to save.  Open project.qpproj file (located in folder chosen when creating project) using notepad++ or desired text editor.
+Find channels block under section for first image.  Copy and paste it over all subsequent channel blocks. Save project.qpproj file. Now all images will have the same channel names and channel colors when opened in qupath.
 
 Also note on full slides this is very memory intensive, given matlab typically allows only a max percentage of total system memory to be used there might not be enough matlab memory available even on a system with more than sufficient physical memory (e.g. 500gb). It might be necessary to increase the virtual memory manually in windows to artificially inflate total system memory and ensure the percent it is willing to take is enough memory for matlab.  
 
 Converting for to parfor in top level script would allow mutliple slides to be run in parallel on a sufficently robust machine. 
+
+To do: might be more efficient to pyramidalize individual channels and use OME companion XML file to wrap them together.
