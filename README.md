@@ -1,6 +1,14 @@
 # Virtual Multiplexing Alignment Project Code
 A set of relatively simple Matlab scripts that can perform nonlinear alignment of scanned full slides at full resolution in order to create superimposed visualizations of multiple passes of IHC on top of IF on the same slide. IHC is unmixed and hemotoxin nuclei are aligned with DAPI from IF.  Meant for superimposing multiple staining and scanning passes of the same slide with minimal distortion, this approach is likely to produce poor results for significantly different adjacent sections or if a significant degree of folding or other distortion occurs. Resulting OME tiffs are readable in QuPath https://qupath.github.io/. Depends on OME bfconvert bftools.zip https://docs.openmicroscopy.org/bio-formats/6.0.1/users/comlinetools/index.html being in source directory.  
 
+Anthony Santella and Eric Rosiek MSKCC MCCF
+
+## Installation
+* Download code
+* Download bfconvert.zip and place next to code
+* Put this directory in the Matlab Path.
+
+## Overview
 The script is currently set up to align as many sections (whole slides or individually exported and arranged ROI for particular sections) as it finds in a directory structure of exported tiffs from one pass of IF and multiple passes of AEC. For each set of images of a particular ROI within a slide it aligns all AEC passes to IF by aligning a deconvolved hemotoxin pseudo IF channel to the DAPI in the IF (identified by filename containing dapi in it). The IHC is assumed to be RGB images, the IF multiple images with a single channel in each image.  
 
 Note the script is dependent on bfconvert to compile the aligned but non-pyramidal images output by matlab into a single multiresolution image readable by QuPath.  
@@ -34,9 +42,7 @@ If exporting ROI rather than whole slides ROI should be at least approximately t
 
 4.	Change pixel resolution if necessary 
 
-5.	ADD TO MATLAB PATH the directory holding script and bfconvert zip.
-
-6.	Run script, final qpath readable image with ome.tiff extension should appear in working directory.
+5.	Run script, final qpath readable image with ome.tiff extension should appear in working directory.
 
 ## Debugging Advice:
 Catastrophic alignment failure: suggest toggling the alignmode variable to see if the alternate linear alignment works better (Always so far this is due to failure of linear alignment one or the other matlab linear alignment method has worked for all slides seen so far).  
@@ -54,4 +60,8 @@ Note by default residual saving is turned off so 3 IHC images will contribute 6 
 
 Since channel names do not propagate to the final tiff, it’s best to create a qupath project file add the images to the project and adjust the names of channels in the project. Open the project rather than the individual images subsequently.  
 
+To do: might be more efficient to pyramidalize individual channels and use OME companion XML file to wrap them together.
+
 Also note on full slides this is very memory intensive, given matlab typically allows only a max percentage of total system memory to be used there might not be enough matlab memory available even on a system with more than sufficient physical memory (e.g. 500gb). It might be necessary to increase the virtual memory manually in windows to artificially inflate total system memory and ensure the percent it is willing to take is enough memory for matlab.  
+
+Converting for to parfor in top level script would allow mutliple slides to be run in parallel on a sufficently robust machine. 
