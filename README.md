@@ -1,5 +1,5 @@
 # Virtual Multiplexing Alignment Project Code
-A set of relatively simple Matlab scripts that can perform nonlinear alignment of scanned full slides at full resolution in order to create superimposed visualizations of multiple passes of IHC on top of IF on the same slide. IHC is unmixed and hemotoxin nuclei are aligned with DAPI from IF.  Meant for superimposing multiple staining and scanning passes of the same slide with minimal distortion, this approach is likely to produce poor results for significantly different adjacent sections or if a significant degree of folding or other distortion occurs. Resulting OME tiffs are readable in QuPath https://qupath.github.io/. Depends on OME bfconvert bftools.zip https://docs.openmicroscopy.org/bio-formats/6.0.1/users/comlinetools/index.html being in source directory.  
+A set of relatively simple Matlab scripts that can perform nonlinear alignment of scanned full slides at full resolution in order to create superimposed visualizations of multiple passes of IHC on top of IF on the same slide. IHC is unmixed and hemotoxylin nuclei are aligned with DAPI from IF.  Meant for superimposing multiple staining and scanning passes of the same slide with minimal distortion, this approach is likely to produce poor results for significantly different adjacent sections or if a significant degree of folding or other distortion occurs. Resulting OME tiffs are readable in QuPath https://qupath.github.io/. Depends on OME bfconvert bftools.zip https://docs.openmicroscopy.org/bio-formats/6.0.1/users/comlinetools/index.html being in source directory.  
 
 Anthony Santella and Eric Rosiek MSKCC MCCF
 
@@ -9,7 +9,7 @@ Anthony Santella and Eric Rosiek MSKCC MCCF
 * Put this directory in the Matlab Path.
 
 ## Overview
-The script is currently set up to align as many sections (whole slides or individually exported and arranged ROI for particular sections) as it finds in a directory structure of exported tiffs from one pass of IF and multiple passes of AEC. For each set of images of a particular ROI within a slide it aligns all AEC passes to IF by aligning a deconvolved hemotoxin pseudo IF channel to the DAPI in the IF (identified by filename containing dapi in it). The IHC is assumed to be RGB images, the IF multiple images with a single channel in each image.  
+The script is currently set up to align as many sections (whole slides or individually exported and arranged ROI for particular sections) as it finds in a directory structure of exported tiffs from one pass of IF and multiple passes of AEC. For each set of images of a particular ROI within a slide it aligns all AEC passes to IF by aligning a deconvolved hemotoxylin pseudo IF channel to the DAPI in the IF (identified by filename containing dapi in it). The IHC is assumed to be RGB images, the IF multiple images with a single channel in each image.  
 
 Note the script is dependent on bfconvert to compile the aligned but non-pyramidal images output by matlab into a single multiresolution image readable by QuPath.  
 
