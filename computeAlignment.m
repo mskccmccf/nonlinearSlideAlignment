@@ -18,10 +18,10 @@ smallresmoving_IF=max(smallresmoving_IF-bk,0);
 %second step linear alignment
 %one of two methods based on alignmode flag
 if (alignmode)
-    tform=imregcorr(smallresmoving_IF,smallresfixed_IH);
+    tform=imregcorr(smallresmoving_IF,smallresfixed_IH,'rigid');
 else
     [optimizer,metric]=imregconfig('multimodal');
-    tform=imregtform(smallresmoving_IF,smallresfixed_IH,'affine',optimizer,metric);
+    tform=imregtform(smallresmoving_IF,smallresfixed_IH,'rigid',optimizer,metric);
 end
 Rfixed = imref2d(size(smallresfixed_IH));
 ifcmovingrlin = imwarp(smallresmoving_IF,tform,'OutputView',Rfixed);
