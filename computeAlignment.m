@@ -1,4 +1,4 @@
-function [tformresized,warpfieldresized] = computeAlignment(smallresfixed_IH,smallresmoving_IF,targetsize,alignres,alignmode,visualize)
+function [tformresized,warpfieldresized] = computeAlignment(smallresfixed_IH,smallresmoving_IF,targetsize,alignres,visualize)
 %computes the actual alignment between images as given, then upsamples it to ouptput size
 %smallresfixed_IH -fixed image already downsampled to resolution for computing alignment
 %smallresmoving_IF -moving ditto (not actually IF if AEC to AEC pass)
@@ -26,24 +26,39 @@ scalebtwlinnon=1;
 smallresfixed_IHlin=imresize(smallresfixed_IH,1/scalebtwlinnon);
 smallresmoving_IFlin=imresize(smallresmoving_IF,1/scalebtwlinnon);
 
+% I have never been able to figure out why periodically one or the other of
+% these built in methods fail, just do both all the time and pick the one
+% with lower SSE
 %second step linear alignment
 %one of two methods based on alignmode flag
-if (alignmode)
+%if (alignmode)
     %would this be better limited to rigid or translation, which should be
     %sufficentl
-    tform=imregcorr(smallresmoving_IFlin,smallresfixed_IHlin,'rigid');
-else
+    tform1=imregcorr(smallresmoving_IFlin,smallresfixed_IHlin,'rigid');
+%else
     [optimizer,metric]=imregconfig('multimodal');
-    tform=imregtform(smallresmoving_IFlin,smallresfixed_IHlin,'rigid',optimizer,metric); %was affine similarity is better but still off
+    tform2=imregtform(smallresmoving_IFlin,smallresfixed_IHlin,'rigid',optimizer,metric); %was affine similarity is better but still off
+%end
+%make temporary transformed images at alignment scale to test error
+Rfixed = imref2d(size(smallresfixed_IHlin));
+%moving with linear applied for nonlinear
+transformedtform1 = imwarp(smallresmoving_IFlin,tform1,'OutputView',Rfixed);
+transformedtform2 = imwarp(smallresmoving_IFlin,tform2,'OutputView',Rfixed);
+error1=sum(sum((transformedtform1-smallresfixed_IHlin).^2));
+error2=sum(sum((transformedtform2-smallresfixed_IHlin).^2));
+if(error1<error2)
+    tform=tform1;
+else
+    tform=tform2;
 end
 
-%doing linear at half scale of nonlinear
+%doing linear at potentially different scale from nonlinear
 tform.T(3,1:2)=tform.T(3,1:2)*scalebtwlinnon;
-
 
 Rfixed = imref2d(size(smallresfixed_IH));
 %moving with linear applied for nonlinear
 ifcmovingrlin = imwarp(smallresmoving_IF,tform,'OutputView',Rfixed);
+
 if (visualize)
     figure; imshowpair(smallresfixed_IH,ifcmovingrlin*10);title('linear alingment');
 end

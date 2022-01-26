@@ -1,4 +1,4 @@
-function alignSlides_multi_IHC(pathinfo,allIHCpath,currentFolder,unmixmatrix,alignmode,discardresidual,visualize,ifcres,ihcres,alignres,imscale)
+function alignSlides_multi_IHC(pathinfo,allIHCpath,currentFolder,unmixmatrix,discardresidual,visualize,ifcres,ihcres,alignres,imscale)
 % top level driver of actual alignment
 % unmixes IHC aligns them together to IHC pass 1 and then adds IF aligned to IHC1 
 %outputs all these images as (largely useless) big tiffs, then calls
@@ -28,7 +28,7 @@ workspacename = pathinfo{1};
 
 cd(workspacename)
 %strip empty cells that shouldnt be there (and may not now)
-for idx = 1:size(allIHCpath)
+for idx = 1:length(allIHCpath)
     if ~isempty(allIHCpath{idx})
         allIHC{idx} = allIHCpath{idx};
     end
@@ -70,7 +70,7 @@ for i=2:length(allIHC) %for each IHC pass align i
     ihci=single(imresize(imread(allIHC{i}),imscale));%IH image
     ihci = colorUnmix(ihci,discardresidual,v1,v2,v3);
     %note rescale param 1 because all IHC assumed on same scanner
-    [tformresized,warpfieldresized] = computeAlignment(masterHC,imresize(abs(single(ihci(:,:,1))),alignres),targetsize,alignres,alignmode,visualize);
+    [tformresized,warpfieldresized] = computeAlignment(masterHC,imresize(abs(single(ihci(:,:,1))),alignres),targetsize,alignres,visualize);
     %warp IHC2
     ihci=imwarp(ihci,tformresized,'OutputView',Rfixed);
     ihci=imwarp(ihci,warpfieldresized);%dont need to change output view
@@ -89,7 +89,7 @@ clear('ihci');
 fullresmoving_IF=imresize(imread(fullresmoving_IF),imscale*rescale);%moving image to be changed %channel of IF to use
 sourcesize=size(fullresmoving_IF);
 fullresmoving_IF=imresize(fullresmoving_IF,alignres);%moving image to be changed %channel of IF to use
-[tformresized,warpfieldresized] = computeAlignment(masterHC,fullresmoving_IF,targetsize,alignres,alignmode,visualize);
+[tformresized,warpfieldresized] = computeAlignment(masterHC,fullresmoving_IF,targetsize,alignres,visualize);
 
 %at this point dont need any of old variables
 clear('masterHC');clear('fullresmoving_IF');
