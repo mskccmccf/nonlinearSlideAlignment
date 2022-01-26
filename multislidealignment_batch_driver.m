@@ -23,7 +23,6 @@ ResA=[0.7086714; 0.20601025; 0.6747923];
 unmixmatrix=[He,A,ResA]; %H+A
 
 %less likely to change parameters
-alignmode=true; %if true uses imregcorr if false uses imregtform, unsure why sometimes one works and sometimes the other.
 discardresidual=true; %throw out residual channel of pseudo IF IHC  to save space
 visualize=false; %pop up figures of aligment steps for debugging
 
@@ -103,7 +102,7 @@ allIHCpath = {};
 %use parfor if want to to align all sections at once on a good workstation, 
 %NB this could cause out of memory failure on a machine with less memory
 for t = 1:(n-1)
-    alignSlides_multi_IHC(pathinfo(t,:),allIHCpath(t,:),currentFolder,unmixmatrix,alignmode,discardresidual,visualize,ifcres,ihcres,alignres,imscale);
+    alignSlides_multi_IHC(pathinfo(t,:),allIHCpath(t,:),currentFolder,unmixmatrix,discardresidual,visualize,ifcres,ihcres,alignres,imscale);
 end
 
 toc
