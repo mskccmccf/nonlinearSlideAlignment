@@ -45,7 +45,7 @@ If exporting ROI rather than whole slides ROI should be at least approximately t
 5.	Run script, final qpath readable image with ome.tiff extension should appear in working directory.
 
 ## Debugging Advice:
-Catastrophic alignment failure: suggest toggling the alignmode variable to see if the alternate linear alignment works better (Always so far this is due to failure of linear alignment one or the other matlab linear alignment method has worked for all slides seen so far).  
+Catastrophic alignment failure: this has always been due to failure in a linear alignment step, currently the two built in methods are tried and the lower SSE is taken, one or the other has always worked in path but if both fail tweaking the less obvious parameters for the more tunable matlab approach may help...  
 
 Subtle misalignment: running alignment at higher (say ¼, instead of 1/8) resolution might help, so far all examples tested (scanned at 20x and exported 1:1) have worked when run as individual tissue slice ROI, with about 50/50 success of getting globally good results aligning an entire slide with multiple tissue sections at once.  
 
